@@ -43,6 +43,7 @@ async function runWorkflow(inputUrl?: string) {
   "state_before": "The sidebar is visible.",
   "state_after": "The sidebar is hidden.",
   "change_analysis": "The sidebar is hidden after the click.",
+  "action_type": "click",
   "element_aria_label": "Collapse the sidebar.", // What the action does (later used for the  agent)
 }
 
@@ -58,6 +59,7 @@ Website has a sidebar with a button to collapse the sidebar, a link to navigate 
     "state_before": "The sidebar is visible.",
     "state_after": "The sidebar is hidden.",
     "change_analysis": "The sidebar is hidden after the click.",
+    "action_type": "interaction",
     "element_aria_label": "Collapse the sidebar",
   },
   // For a give nav.sidebar > a(Navigate to the home page)
@@ -67,6 +69,7 @@ Website has a sidebar with a button to collapse the sidebar, a link to navigate 
     "state_before": "The page is on the getting started page.",
     "state_after": "The page is navigated to the home page.",
     "change_analysis": "The page is navigated to the home page after the click.",
+    "action_type": "navigation",
     "element_aria_label": "Navigate to the home page.",
   },
   // For a give section.main > button(aria-label: Collapse the main body)
@@ -76,6 +79,7 @@ Website has a sidebar with a button to collapse the sidebar, a link to navigate 
     "state_before": "The main body is visible.",
     "state_after": "The main body is hidden.",
     "change_analysis": "The main body is hidden after the click.",
+    "action_type": "interaction",
     "element_aria_label": "Collapse the main body.",
   }
 ]
@@ -113,6 +117,12 @@ Those will be used by an algorithm / agent to locate the elements and interact w
               .optional()
               .describe(
                 "Analysis of what changes occur when this element is interacted with"
+              ),
+            action_type: z
+              .string()
+              .optional()
+              .describe(
+                "The type of action that can be performed on this element (e.g., interaction, navigation, etc.)"
               ),
             element_aria_label: z
               .string()
