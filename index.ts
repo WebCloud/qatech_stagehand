@@ -1,10 +1,6 @@
-// Generated script for workflow 776459ec-7bcf-4215-b9a9-4719f75234d7
-// Generated at 2025-09-28T19:38:20.441Z
-
 import { Stagehand, type ConstructorParams } from "@browserbasehq/stagehand";
 import { z } from "zod";
 
-// Stagehand configuration
 const stagehandConfig = (): ConstructorParams => {
   return {
     env: "BROWSERBASE",
@@ -17,32 +13,34 @@ const stagehandConfig = (): ConstructorParams => {
   };
 };
 
-async function runWorkflow() {
+async function runWorkflow(inputUrl?: string) {
   let stagehand: Stagehand | null = null;
 
   try {
-    // Initialize Stagehand
     console.log("Initializing Stagehand...");
     stagehand = new Stagehand(stagehandConfig());
     await stagehand.init();
     console.log("Stagehand initialized successfully.");
 
-    // Get the page instance
     const page = stagehand.page;
     if (!page) {
       throw new Error("Failed to get page instance from Stagehand");
     }
 
-    // Step 1: Navigate to URL
-    console.log("Navigating to: https://vaul.emilkowal.ski/getting-started");
-    await page.goto("https://vaul.emilkowal.ski/getting-started");
+    const targetUrl = inputUrl;
 
-    // Step 2: Extract data
+    if (!targetUrl) {
+      throw new Error("URL is required");
+    }
+
+    console.log(`Navigating to: ${targetUrl}`);
+    await page.goto(targetUrl);
+
     console.log(
       `Extracting: Reading and extracting data of all interactive elements on this page.`
     );
     const extractedData2 = await page.extract({
-      instruction: `give me all the actions possible on https://vaul.emilkowal.ski/getting-started annotating them in the following data structure
+      instruction: `give me all the actions possible on ${targetUrl} annotating them in the following data structure
 
 {
   "website_section": "Sidebar",
@@ -151,8 +149,22 @@ Those will be used by an algorithm / agent to locate the elements and interact w
   }
 }
 
-// Single execution
-runWorkflow().then((result) => {
+const args = process.argv.slice(2);
+let urlArg: string | undefined;
+for (let i = 0; i < args.length; i++) {
+  const arg = args[i];
+  if (arg === "--url" || arg === "-u") {
+    urlArg = args[i + 1];
+    i++;
+    continue;
+  }
+  if (arg.startsWith("--url=")) {
+    urlArg = arg.slice("--url=".length);
+    continue;
+  }
+}
+
+runWorkflow(urlArg).then((result) => {
   console.log("Execution result:", result);
   process.exit(result.success ? 0 : 1);
 });
