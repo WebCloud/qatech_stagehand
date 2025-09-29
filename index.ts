@@ -125,9 +125,7 @@ Those will be used by an algorithm / agent to locate the elements and interact w
       }),
     });
 
-    console.log("================");
     console.log(extractedData);
-    console.log("================");
     success = true;
   } catch (error) {
     console.error("Workflow failed:", error);
