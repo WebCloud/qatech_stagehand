@@ -123,6 +123,8 @@ Those will be used by an algorithm / agent to locate the elements and interact w
         ),
       }),
     });
+
+    console.clear();
     console.log(extractedData);
 
     return { success: true };
