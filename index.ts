@@ -15,6 +15,7 @@ const stagehandConfig = (): ConstructorParams => {
 
 async function runWorkflow(inputUrl?: string) {
   let stagehand: Stagehand | null = null;
+  let success = false;
 
   try {
     stagehand = new Stagehand(stagehandConfig());
@@ -124,22 +125,24 @@ Those will be used by an algorithm / agent to locate the elements and interact w
       }),
     });
 
-    console.clear();
+    console.log("================");
     console.log(extractedData);
-
-    return { success: true };
+    console.log("================");
+    success = true;
   } catch (error) {
     console.error("Workflow failed:", error);
-    return { success: false, error };
   } finally {
     if (stagehand) {
       try {
         await stagehand.close();
       } catch (err) {
         console.error("Error closing Stagehand:", err);
+        success = false;
       }
     }
   }
+
+  return { success };
 }
 
 let urlArg = process.env.URL;
