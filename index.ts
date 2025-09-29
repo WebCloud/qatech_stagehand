@@ -90,43 +90,36 @@ Those will be used by an algorithm / agent to locate the elements and interact w
           z.object({
             website_section: z
               .string()
-              .optional()
               .describe(
                 "The section of the website where this element is located (e.g., Header, Sidebar, Main Content, Footer, Navigation, etc.)"
               ),
             website_section_selector: z
               .string()
-              .optional()
               .describe(
                 "A CSS selector that targets the section containing this element (e.g., 'nav.sidebar', 'header', 'main', '.footer')"
               ),
             state_before: z
               .string()
-              .optional()
               .describe(
                 "Description of the current state before interacting with this element"
               ),
             state_after: z
               .string()
-              .optional()
               .describe(
                 "Description of the expected state after interacting with this element"
               ),
             change_analysis: z
               .string()
-              .optional()
               .describe(
                 "Analysis of what changes occur when this element is interacted with"
               ),
             action_type: z
-              .string()
-              .optional()
+              .enum(["interaction", "navigation"])
               .describe(
-                "The type of action that can be performed on this element (e.g., interaction, navigation, etc.)"
+                "The type of action that can be performed on this element (e.g., interaction, navigation)"
               ),
             element_aria_label: z
               .string()
-              .optional()
               .describe(
                 "The best possible text locator for this element (e.g., aria-label, innerText, label, alt text, etc.)"
               ),
