@@ -17,10 +17,8 @@ async function runWorkflow(inputUrl?: string) {
   let stagehand: Stagehand | null = null;
 
   try {
-    console.log("Initializing Stagehand...");
     stagehand = new Stagehand(stagehandConfig());
     await stagehand.init();
-    console.log("Stagehand initialized successfully.");
 
     const page = stagehand.page;
     if (!page) {
@@ -33,13 +31,9 @@ async function runWorkflow(inputUrl?: string) {
       throw new Error("URL is required");
     }
 
-    console.log(`Navigating to: ${targetUrl}`);
     await page.goto(targetUrl);
 
-    console.log(
-      `Extracting: Reading and extracting data of all interactive elements on this page.`
-    );
-    const extractedData2 = await page.extract({
+    const extractedData = await page.extract({
       instruction: `give me all the actions possible on ${targetUrl} annotating them in the following data structure
 
 {
@@ -129,17 +123,14 @@ Those will be used by an algorithm / agent to locate the elements and interact w
         ),
       }),
     });
-    console.log("Extracted:", extractedData2);
+    console.log(extractedData);
 
-    console.log("Workflow completed successfully");
     return { success: true };
   } catch (error) {
     console.error("Workflow failed:", error);
     return { success: false, error };
   } finally {
-    // Clean up
     if (stagehand) {
-      console.log("Closing Stagehand connection.");
       try {
         await stagehand.close();
       } catch (err) {
@@ -165,7 +156,6 @@ for (let i = 0; i < args.length; i++) {
 }
 
 runWorkflow(urlArg).then((result) => {
-  console.log("Execution result:", result);
   process.exit(result.success ? 0 : 1);
 });
 
