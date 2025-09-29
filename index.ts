@@ -140,19 +140,11 @@ Those will be used by an algorithm / agent to locate the elements and interact w
   }
 }
 
-const args = process.argv.slice(2);
-let urlArg: string | undefined;
-for (let i = 0; i < args.length; i++) {
-  const arg = args[i];
-  if (arg === "--url" || arg === "-u") {
-    urlArg = args[i + 1];
-    i++;
-    continue;
-  }
-  if (arg.startsWith("--url=")) {
-    urlArg = arg.slice("--url=".length);
-    continue;
-  }
+let urlArg = process.env.URL;
+
+if (!urlArg) {
+  console.error("URL is required");
+  process.exit(1);
 }
 
 runWorkflow(urlArg).then((result) => {
