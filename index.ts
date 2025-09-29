@@ -4,7 +4,7 @@ import { z } from "zod";
 const stagehandConfig = (): ConstructorParams => {
   return {
     env: "BROWSERBASE",
-    verbose: 1,
+    verbose: 0,
     modelName: "google/gemini-2.5-flash-preview-05-20",
     disablePino: true,
     modelClientOptions: {
